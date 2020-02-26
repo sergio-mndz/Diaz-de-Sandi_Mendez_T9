@@ -53,6 +53,10 @@ void PIT_enable(void) {
 	PIT->CHANNEL[0].TCTRL = (1<<1) | (1<<0); /* PIT timer, Timer interruption */
 }
 
+void PIT_disable(void) {
+	PIT->MCR |= (1<<1); /* Enable PIT */
+}
+
 /* Depending on the PIT selected enable interruption */
 void PIT_enable_interrupt(PIT_timer_t pit, priority_level_t priority) {
 	switch(pit) {

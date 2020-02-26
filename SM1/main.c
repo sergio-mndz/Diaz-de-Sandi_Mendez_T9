@@ -16,6 +16,7 @@ gpio_pin_control_register_t sw_enable = GPIO_MUX1 | GPIO_PE | GPIO_PS |
 
 typedef enum
 {
+	INITIAL,
 	GREEN,
 	BLUE,
 	PURPLE,
@@ -36,95 +37,10 @@ void pit_handler(void)
 	}
 }
 
-void ports_configuration(void);
-void ports_configuration(void);
-
 int main(void)
 {
-	SM_states_t current_state = GREEN;
+	SM_states_t current_state = INITIAL;
 
-	ports_configuration();
-
-	while(1)
-	{
-		while(TRUE == GPIO_get_irq_status(GPIO_C))
-		{
-			switch(current_state)
-			{
-				case GREEN:
-					current_state = BLUE;
-					blue_on();
-				break;
-				case BLUE:
-					current_state = PURPLE;
-					purple_on();
-				break;
-				case PURPLE:
-					current_state = RED;
-					red_on();
-				break;
-				case RED:
-					current_state = YELLOW;
-					yellow_on();
-				break;
-				case YELLOW:
-					current_state = GREEN;
-					green_on();
-				break;
-				default:
-					current_state = GREEN;
-					green_on();
-				break;
-			}
-
-			while(FALSE == g_timer_end_flag)
-			{
-				// Nothing
-			}
-			g_timer_end_flag = FALSE;
-		}
-
-		while(TRUE == GPIO_get_irq_status(GPIO_A))
-		{
-			switch(current_state)
-			{
-				case YELLOW:
-					current_state = RED;
-					red_on();
-				break;
-				case RED:
-					current_state = PURPLE;
-					purple_on();
-				break;
-				case PURPLE:
-					current_state = BLUE;
-					blue_on();
-				break;
-				case BLUE:
-					current_state = GREEN;
-					green_on();
-				break;
-				case GREEN:
-					current_state = YELLOW;
-					yellow_on();
-				break;
-				default:
-					current_state = YELLOW;
-					break;
-			}
-
-			while(FALSE == g_timer_end_flag)
-			{
-				// Nothing
-			}
-			g_timer_end_flag = FALSE;
-		}
-	}
-
-    return 0 ;
-}
-
-void ports_configuration(void) {
 	/* Enable clocks */
 	GPIO_clock_gating(GPIO_A);
 	GPIO_clock_gating(GPIO_B);
@@ -164,6 +80,89 @@ void ports_configuration(void) {
 
 	/* Configure delay time with corresponding parameters */
 	PIT_delay(PIT_0, SYSTEM_CLOCK, DELAY);
-	/* Enable PIT at the end to overcome Silicon Bug*/
+
+	while( (FALSE == GPIO_get_irq_status(GPIO_A)) &&
+			(FALSE == GPIO_get_irq_status(GPIO_C)) )
+	{
+		PIT_disable();
+	}
 	PIT_enable();
+
+	while(1)
+	{
+		while(TRUE == GPIO_get_irq_status(GPIO_A))
+		{
+			switch(current_state)
+			{
+				case GREEN:
+					current_state = BLUE;
+					blue_on();
+				break;
+				case BLUE:
+					current_state = PURPLE;
+					purple_on();
+				break;
+				case PURPLE:
+					current_state = RED;
+					red_on();
+				break;
+				case RED:
+					current_state = YELLOW;
+					yellow_on();
+				break;
+				case YELLOW:
+					current_state = GREEN;
+					green_on();
+				break;
+				default:
+					current_state = GREEN;
+					green_on();
+				break;
+			}
+
+			while(FALSE == g_timer_end_flag)
+			{
+				/* Nothing */
+			}
+			g_timer_end_flag = FALSE;
+		}
+
+		while(TRUE == GPIO_get_irq_status(GPIO_C))
+		{
+			switch(current_state)
+			{
+				case YELLOW:
+					current_state = RED;
+					red_on();
+				break;
+				case RED:
+					current_state = PURPLE;
+					purple_on();
+				break;
+				case PURPLE:
+					current_state = BLUE;
+					blue_on();
+				break;
+				case BLUE:
+					current_state = GREEN;
+					green_on();
+				break;
+				case GREEN:
+					current_state = YELLOW;
+					yellow_on();
+				break;
+				default:
+					current_state = YELLOW;
+					break;
+			}
+
+			while(FALSE == g_timer_end_flag)
+			{
+				/* Nothing */
+			}
+			g_timer_end_flag = FALSE;
+		}
+	}
+
+    return 0 ;
 }

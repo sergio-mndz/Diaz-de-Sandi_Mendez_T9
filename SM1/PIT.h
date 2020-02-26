@@ -75,6 +75,7 @@ void PIT_clear_interrupt_flag(void);
  	 \return uint8_t flag status
  */
 void PIT_enable(void);
+void PIT_disable(void);
 
 /********************************************************************************************/
 /*!
