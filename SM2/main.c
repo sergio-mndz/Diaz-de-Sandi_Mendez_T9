@@ -8,7 +8,7 @@
 #include "PIT.h"
 
 #define SYSTEM_CLOCK (21000000U)
-#define DELAY (0.25F)
+#define DELAY (1.0F)
 
 gpio_pin_control_register_t led_enable = GPIO_MUX1;
 gpio_pin_control_register_t sw_enable = GPIO_MUX1 | GPIO_PE | GPIO_PS |
@@ -20,13 +20,7 @@ uint8_t g_timer_end_flag = FALSE;
 
 void pit_handler(void)
 {
-	static uint8_t counter = 0;
-	counter++;
-	if(counter == 4)
-	{
-		g_timer_end_flag = TRUE;
-		counter = 0;
-	}
+	counter = 0;
 }
 
 int main(void)
