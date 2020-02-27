@@ -109,10 +109,26 @@ typedef const uint32_t gpio_pin_control_register_t;
  	 \todo Implement a mechanism to clear interrupts by a specific pin.
  */
 void GPIO_clear_interrupt(gpio_port_name_t port_name);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief	 This function works as a geter for the specified PORT local IRQ flag
 
+ 	 \param[in]  gpio Port to check
+ 	 \return Value of the flag corresponding to the IRQ
+ */
 uint8_t GPIO_get_irq_status(gpio_port_name_t gpio);
-void GPIO_clear_irq_status(gpio_port_name_t gpio);
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+ 	 \brief	 This function clears the specified PORT local IRQ flag
 
+ 	 \param[in]  gpio Port's flag to clear
+ 	 \return void
+ */
+void GPIO_clear_irq_status(gpio_port_name_t gpio);
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/

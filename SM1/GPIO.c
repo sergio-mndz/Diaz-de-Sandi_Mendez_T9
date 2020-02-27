@@ -15,6 +15,7 @@
 
 static gpio_interrupt_flags_t g_intr_status_flag = {0};
 
+/* Turn on GPIOC local INT flag and off the GPIOA flag */
 void PORTC_IRQHandler(void)
 {
 	g_intr_status_flag.flag_port_c = TRUE;
@@ -23,6 +24,7 @@ void PORTC_IRQHandler(void)
 
 }
 
+/* Turn on GPIOA local INT flag and off the GPIOC flag */
 void PORTA_IRQHandler(void)
 {
 	g_intr_status_flag.flag_port_a = TRUE;
@@ -53,6 +55,7 @@ void GPIO_clear_interrupt(gpio_port_name_t port_name)
 	}// end switch
 }
 
+/* Depending on which PORT is calling clear its flag status */
 void GPIO_clear_irq_status(gpio_port_name_t gpio)
 {
 	if(GPIO_A == gpio)
@@ -64,7 +67,7 @@ void GPIO_clear_irq_status(gpio_port_name_t gpio)
 		g_intr_status_flag.flag_port_c = FALSE;
 	}
 }
-
+/* Depending on which PORT is calling return its flag status */
 uint8_t GPIO_get_irq_status(gpio_port_name_t gpio)
 {
 	uint8_t status = 0;
