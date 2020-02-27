@@ -8,7 +8,7 @@
 #include "PIT.h"
 
 #define SYSTEM_CLOCK (21000000U)
-#define DELAY (0.25F)
+#define DELAY (1.0F)
 
 gpio_pin_control_register_t led_enable = GPIO_MUX1;
 gpio_pin_control_register_t sw_enable = GPIO_MUX1 | GPIO_PE | GPIO_PS | INTR_FALLING_EDGE;
@@ -25,19 +25,10 @@ typedef enum
 
 uint8_t g_timer_end_flag = FALSE;
 
-/* Function assigne to the PIT callback */
+/* Function assigned to the PIT callback */
 void pit_handler(void)
 {
-	/* Counter of times the delay time has passed */
-	static uint8_t counter = 0;
-	counter++;
-	/* At four times (0.25 x 4) a second has passed */
-	if(counter == 4)
-	{
-		/* Turn on respective flag and restart the count */
-		g_timer_end_flag = TRUE;
-		counter = 0;
-	}
+	g_timer_end_flag = TRUE;
 }
 
 int main(void)
